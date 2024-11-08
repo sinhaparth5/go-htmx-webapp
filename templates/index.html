@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Go Web App with SQLite and HTMX</title>
+    <script src="https://unpkg.com/htmx.org@1.9.4"></script>
+</head>
+<body>
+    <h1>Store Items</h1>
+
+    <!-- Add Item Form -->
+    <form hx-post="/add" hx-target="#items-list" hx-swap="outerHTML">
+        <label for="name">Name: </label>
+        <input type="text" name="name" required>
+        <label for="price">Price: </label>
+        <input type="number" name="price" required>
+        <button type="submit">Add Item</button>
+    </form>
+
+    <!-- Items List -->
+    <div id="items-list">
+        <ul>
+            {{if .}}
+                {{range .}}
+                    <li>
+                        <span>{{.Name}} - ${{.Price}}</span>
+                        <button hx-get="/delete/{{.ID}}" hx-target="#items-list" hx-swap="outerHTML">Delete</button>
+                    </li>
+                {{end}}
+            {{else}}
+                <p>No items found.</p>
+            {{end}}
+        </ul>
+    </div>
+</body>
+</html>
